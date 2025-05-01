@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Input & Visualisasi Data</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h2>Input Data dan Tampilkan Grafik</h2>
+
+    <form id="dataForm">
+      <input type="text" id="labelInput" placeholder="Label (contoh: Jan)" required>
+      <input type="number" id="valueInput" placeholder="Nilai (contoh: 10)" required>
+      <button type="submit">Tambah Data</button>
+    </form>
+
+
+    <div class="row chart-grid">
+        <!-- Kolom kiri -->
+        <div class="left-column">
+          <div class="chart-box">
+            <h3>Grafik Bar</h3>
+            <canvas id="barChart"></canvas>
+          </div>
+          <div class="chart-box">
+            <h3>Grafik Line</h3>
+            <canvas id="lineChart"></canvas>
+          </div>
+        </div>
+      
+        <!-- Kolom kanan -->
+        <div class="right-column">
+          <div class="chart-box full-height">
+            <h3>Grafik Pie</h3>
+            <canvas id="pieChart"></canvas>
+          </div>
+        </div>
+      </div>      
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
