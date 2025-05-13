@@ -1,0 +1,22 @@
+monday:
+    i turned the homepage into almost a homepage
+    i implemented the excel input[Havent tested]
+    i made the database
+
+<!-- <h2>Input Data dan Tampilkan Grafik</h2>
+
+    <form id="dataForm">
+      <input type="text" id="labelInput" placeholder="Label (contoh: Jan)" required>
+      <input type="number" id="valueInput" placeholder="Nilai (contoh: 10)" required>
+      <button type="submit">Tambah Data</button>
+    </form>
+
+    <h2>Upload Data Excel</h2>
+    <form action="upload.php" method="post" enctype="multipart/form-data">
+      <input type="file" name="excelFile" accept=".xlsx" required>
+      <button type="submit">Upload File</button>
+    </form> -->
+      <!-- ADD OPTION FOR TYPE OF CHARTS -->
+       <!-- ADD CONNECTION TO A TEMP DATABASE WITH XAMPP -->
+        <!-- HEADER MAKE IT LIKE A HOME TYPE BEAT -->
+         <!-- PRETTIFY THE LAYOUT, THE LOOK, ETC -->

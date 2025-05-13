@@ -1,18 +1,23 @@
-const labels = [];
-const dataValues = [];
+// Ambil data dari PHP
+const labels = window.chartData?.labels || [];
+const dataValues = window.chartData?.values || [];
 
 const barCtx = document.getElementById('barChart').getContext('2d');
 const lineCtx = document.getElementById('lineChart').getContext('2d');
 const pieCtx = document.getElementById('pieChart').getContext('2d');
 
+// Warna palet
+const backgroundColors = ['#1E315C', '#2E4D68', '#C1B4A0', '#060606', '#ff6384', '#36a2eb', '#ffce56'];
+
 const commonData = () => ({
   labels: labels,
   datasets: [{
-    label: 'Nilai Data',
+    label: 'Jumlah Produksi',
     data: dataValues,
-    backgroundColor: ['#1E315C', '#2E4D68', '#C1B4A0', '#060606', '#ff6384', '#36a2eb', '#ffce56'],
+    backgroundColor: backgroundColors,
     borderColor: '#060606',
-    borderWidth: 1
+    borderWidth: 1,
+    fill: false
   }]
 });
 
@@ -24,38 +29,46 @@ const commonOptions = {
   }
 };
 
-const barChart = new Chart(barCtx, {
+new Chart(barCtx, {
   type: 'bar',
   data: commonData(),
   options: commonOptions
 });
 
-const lineChart = new Chart(lineCtx, {
+new Chart(lineCtx, {
   type: 'line',
   data: commonData(),
-  options: commonOptions
+  options: {
+    ...commonOptions,
+    elements: {
+      line: { tension: 0.3 }
+    }
+  }
 });
 
-const pieChart = new Chart(pieCtx, {
+new Chart(pieCtx, {
   type: 'pie',
   data: commonData(),
   options: commonOptions
 });
 
-document.getElementById('dataForm').addEventListener('submit', function(e) {
-  e.preventDefault();
-  const label = document.getElementById('labelInput').value;
-  const value = parseFloat(document.getElementById('valueInput').value);
+// Fungsi untuk form input manual (jika ada)
+const dataForm = document.getElementById('dataForm');
+if (dataForm) {
+  dataForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const label = document.getElementById('labelInput').value;
+    const value = parseFloat(document.getElementById('valueInput').value);
 
-  if (label && !isNaN(value)) {
-    labels.push(label);
-    dataValues.push(value);
+    if (label && !isNaN(value)) {
+      labels.push(label);
+      dataValues.push(value);
 
-    barChart.update();
-    lineChart.update();
-    pieChart.update();
+      barChart.update();
+      lineChart.update();
+      pieChart.update();
 
-    // Reset form
-    this.reset();
-  }
-});
+      this.reset();
+    }
+  });
+}
