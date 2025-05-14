@@ -49,20 +49,6 @@ nav a.active {
   text-decoration: underline;
 }
 
-/* ====================================
-   Sidebar (if used)
-==================================== */
-aside,
-.sidebar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 200px;
-  height: 100%;
-  background-color: #00a79d;
-  padding: 2rem 1rem;
-  color: white;
-}
 
 /* ====================================
    Container Layout
@@ -71,7 +57,7 @@ aside,
   display: flex;
   flex-direction: column;
   padding: 2rem;
-  margin-left: 200px; /* offset for sidebar */
+  margin-left: auto; /* offset for sidebar */
 }
 
 /* ====================================

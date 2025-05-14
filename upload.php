@@ -1,6 +1,7 @@
 <?php
 include 'koneksi.php';
 require 'vendor/autoload.php';
+include 'auth.php';
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
 $pesan = '';
@@ -92,6 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <li><a href="index.php">Home</a></li>
         <li><a href="upload.php" class="active">Input Data</a></li>
         <li><a href="kapal.html">Lihat Kapal</a></li>
+        <li><a href="logout.php">Logout</a></li>
       </ul>
     </nav>
   </header>

@@ -4,7 +4,7 @@ include 'koneksi.php'; // file koneksi ke database
 
 // Redirect jika sudah login
 if (isset($_SESSION['user'])) {
-    header("Location: dashboard.php");
+    header("Location: index.php");
     exit;
 }
 
@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'username' => $user['username'],
             'role' => $user['role']
         ];
-        header("Location: dashboard.php");
+        header("Location: index.php");
         exit;
     } else {
         $error = "Username atau password salah.";

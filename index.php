@@ -1,5 +1,6 @@
 <?php
 include 'koneksi.php';
+include 'auth.php';
 
 // Ambil daftar kapal
 $kapalQuery = $koneksi->query("SELECT id, nama FROM kapal");
@@ -63,6 +64,7 @@ $tahunList = range($tahunSekarang - 5, $tahunSekarang + 1);
         <li><a href="index.php">Home</a></li>
         <li><a href="upload.php">Input Data</a></li>
         <li><a href="kapal.html">Lihat Kapal</a></li>
+        <li><a href="logout.php">Logout</a></li>
       </ul>
     </nav>
   </header>
