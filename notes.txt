@@ -20,3 +20,14 @@ monday:
        <!-- ADD CONNECTION TO A TEMP DATABASE WITH XAMPP -->
         <!-- HEADER MAKE IT LIKE A HOME TYPE BEAT -->
          <!-- PRETTIFY THE LAYOUT, THE LOOK, ETC -->
+
+
+        // Animasi hover sederhana untuk kartu
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.boxShadow = '0 0.5rem 1rem rgb(0 0 0 / 0.15)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.boxShadow = '0 0.125rem 0.25rem rgb(0 0 0 / 0.1)';
+            });
+        });

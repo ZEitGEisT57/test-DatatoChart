@@ -1,16 +1,16 @@
 <?php
 include 'koneksi.php';
 
-// Ambil semua kapal
 $kapal_sql = "SELECT id, nama FROM kapal";
 $kapal_result = $koneksi->query($kapal_sql);
 
 $rekap = [];
+$summary = ['penumpang' => 0, 'kendaraan' => 0, 'trip' => 0];
+
 while ($kapal = $kapal_result->fetch_assoc()) {
     $kapal_id = $kapal['id'];
     $nama_kapal = $kapal['nama'];
 
-    // Query total jumlah produksi per jenis tiket untuk setiap kapal
     $query = "
         SELECT jenis_tiket, SUM(jumlah_produksi) AS total
         FROM produksi
@@ -19,12 +19,12 @@ while ($kapal = $kapal_result->fetch_assoc()) {
     ";
     $produksi_result = $koneksi->query($query);
 
-    // Siapkan default nilai
     $data = ['penumpang' => 0, 'kendaraan' => 0, 'trip' => 0];
     while ($row = $produksi_result->fetch_assoc()) {
         $jenis = strtolower($row['jenis_tiket']);
         if (isset($data[$jenis])) {
             $data[$jenis] = $row['total'];
+            $summary[$jenis] += $row['total'];
         }
     }
 
@@ -42,38 +42,88 @@ $koneksi->close();
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Dashboard Produksi Kapal</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .scroll-row {
+            display: flex;
+            overflow-x: auto;
+            gap: 1rem;
+            padding: 1rem 0;
+        }
+
+        .scroll-row::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .scroll-row::-webkit-scrollbar-thumb {
+            background-color: #ccc;
+            border-radius: 4px;
+        }
+
+        .card {
+            min-width: 240px;
+            background: #fff;
+            border-radius: 0.375rem;
+            box-shadow: 0 0.125rem 0.25rem rgb(0 0 0 / 0.1);
+            padding: 1rem;
+            flex-shrink: 0;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 0.15);
+        }
+
+        .chart-area {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .chart-box {
+            background: #fff;
+            border-radius: 0.375rem;
+            box-shadow: 0 0.125rem 0.25rem rgb(0 0 0 / 0.1);
+            padding: 1rem;
+            flex: 1 1 300px;
+        }
+    </style>
 </head>
 <body>
 
 <header>
-    <div class="logo">
-        <h1>ASDP Dashboard</h1>
-    </div>
-    <nav>
-        <ul>
-            <li><a href="dashboard.php" class="active">Dashboard</a></li>
-            <li><a href="upload.php">Input Data</a></li>
-            <li><a href="logout.php">Logout</a></li>
+    <div class="container header-inner">
+      <div class="logo">
+        <img src="5f5091ef-6eb8-4132-99ed-af27a6a040c2.png" alt="Logo ASDP" />
+      </div>
+      <h1>Trend & Produksi Penumpang Kapal ASDP Merauke</h1>
+      <nav>
+        <ul class="nav-list">
+          <li><a href="index.php" class="nav-link active">Home</a></li>
+          <li><a href="upload.php" class="nav-link">Input Data</a></li>
+          <li><a href="kapal.php" class="nav-link">Lihat Kapal</a></li>
+          <li><a href="logout.php" class="nav-link">Logout</a></li>
         </ul>
-    </nav>
+      </nav>
+    </div>
 </header>
 
-<div class="container">
+<div class="container content">
     <main class="main">
         <h2 class="title">Ringkasan Produksi Kapal</h2>
 
         <?php if (empty($rekap)): ?>
             <p>Tidak ada data produksi yang tersedia.</p>
         <?php else: ?>
-            <div class="grid">
+            <div class="scroll-row">
                 <?php foreach ($rekap as $kapal): ?>
                     <div class="card">
                         <h3><?= htmlspecialchars($kapal['nama_kapal']) ?></h3>
-                        <ul>
+                        <ul style="list-style:none; padding-left:0; margin-top:0.5rem;">
                             <li>🧍 Penumpang: <strong><?= number_format($kapal['penumpang']) ?></strong></li>
                             <li>🚗 Kendaraan: <strong><?= number_format($kapal['kendaraan']) ?></strong></li>
                             <li>🚢 Trip: <strong><?= number_format($kapal['trip']) ?></strong></li>
@@ -81,9 +131,67 @@ $koneksi->close();
                     </div>
                 <?php endforeach; ?>
             </div>
+
+            <h2 class="title">Statistik Produksi Keseluruhan</h2>
+            <div class="chart-area">
+                <div class="chart-box">
+                    <h3>Total Produksi (Bar Chart)</h3>
+                    <canvas id="barChart"></canvas>
+                </div>
+                <div class="chart-box">
+                    <h3>Komposisi Tiket (Pie Chart)</h3>
+                    <canvas id="pieChart"></canvas>
+                </div>
+            </div>
         <?php endif; ?>
     </main>
 </div>
+
+<script>
+    const summaryData = <?= json_encode($summary) ?>;
+
+    // Bar chart
+    new Chart(document.getElementById('barChart'), {
+        type: 'bar',
+        data: {
+            labels: ['Penumpang', 'Kendaraan', 'Trip'],
+            datasets: [{
+                label: 'Jumlah Produksi',
+                data: [summaryData.penumpang, summaryData.kendaraan, summaryData.trip],
+                backgroundColor: ['#4caf50', '#2196f3', '#ff9800'],
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false },
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0
+                    }
+                }
+            }
+        }
+    });
+
+    // Pie chart
+    new Chart(document.getElementById('pieChart'), {
+        type: 'pie',
+        data: {
+            labels: ['Penumpang', 'Kendaraan', 'Trip'],
+            datasets: [{
+                data: [summaryData.penumpang, summaryData.kendaraan, summaryData.trip],
+                backgroundColor: ['#4caf50', '#2196f3', '#ff9800'],
+            }]
+        },
+        options: {
+            responsive: true
+        }
+    });
+</script>
 
 </body>
 </html>

@@ -11,8 +11,8 @@ while ($row = $kapalQuery->fetch_assoc()) {
 
 // Ambil kapal, bulan, dan tahun dari GET
 $selectedKapalId = $_GET['kapal_id'] ?? null;
-$selectedBulan = $_GET['bulan'] ?? date('m');
-$selectedTahun = $_GET['tahun'] ?? date('Y');
+$selectedBulan   = $_GET['bulan']    ?? date('m');
+$selectedTahun   = $_GET['tahun']    ?? date('Y');
 
 // Siapkan data untuk grafik
 $labels = [];
@@ -20,8 +20,8 @@ $values = [];
 
 if ($selectedKapalId) {
     $dataQuery = $koneksi->prepare("
-        SELECT jenis_tiket, SUM(jumlah_produksi) AS total 
-        FROM produksi 
+        SELECT jenis_tiket, SUM(jumlah_produksi) AS total
+        FROM produksi
         WHERE kapal_id = ? AND MONTH(tanggal) = ? AND YEAR(tanggal) = ?
         GROUP BY jenis_tiket
     ");
@@ -35,88 +35,93 @@ if ($selectedKapalId) {
     }
 }
 
-// Untuk dropdown bulan & tahun
+// Dropdown bulan & tahun
 $bulanList = [
-    '01' => 'Januari', '02' => 'Februari', '03' => 'Maret',
-    '04' => 'April', '05' => 'Mei', '06' => 'Juni',
-    '07' => 'Juli', '08' => 'Agustus', '09' => 'September',
-    '10' => 'Oktober', '11' => 'November', '12' => 'Desember'
+    '01'=>'Januari','02'=>'Februari','03'=>'Maret',
+    '04'=>'April','05'=>'Mei','06'=>'Juni',
+    '07'=>'Juli','08'=>'Agustus','09'=>'September',
+    '10'=>'Oktober','11'=>'November','12'=>'Desember'
 ];
 $tahunSekarang = date('Y');
-$tahunList = range($tahunSekarang - 5, $tahunSekarang + 1);
+$tahunList     = range($tahunSekarang - 5, $tahunSekarang + 1);
 ?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>Trend dan Produksi Penumpang Kapal ASDP Cabang Merauke</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Trend & Produksi Penumpang ASDP Merauke</title>
+  <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
   <header>
-    <div class="logo">
-      <h1>Trend dan Produksi Penumpang Kapal ASDP Cabang Merauke</h1>
+    <div class="container header-inner">
+      <div class="logo">
+        <img src="5f5091ef-6eb8-4132-99ed-af27a6a040c2.png" alt="Logo ASDP" />
+      </div>
+      <h1>Trend & Produksi Penumpang Kapal ASDP Merauke</h1>
+      <nav>
+        <ul class="nav-list">
+          <li><a href="index.php" class="nav-link active">Home</a></li>
+          <li><a href="upload.php" class="nav-link">Input Data</a></li>
+          <li><a href="kapal.php" class="nav-link">Lihat Kapal</a></li>
+          <li><a href="logout.php" class="nav-link">Logout</a></li>
+        </ul>
+      </nav>
     </div>
-    <nav>
-      <ul>
-        <li><a href="index.php">Home</a></li>
-        <li><a href="upload.php">Input Data</a></li>
-        <li><a href="kapal.php">Lihat Kapal</a></li>
-        <li><a href="logout.php">Logout</a></li>
-      </ul>
-    </nav>
   </header>
 
-  <div class="container">
-    <form method="get" class="kapal-form">
+  <aside class="sidebar">
+    <form method="get" class="filter-form">
       <label for="kapal_id">Pilih Kapal:</label>
-      <select name="kapal_id" id="kapal_id">
-        <?php foreach ($kapalList as $kapal): ?>
-          <option value="<?= $kapal['id'] ?>" <?= $kapal['id'] == $selectedKapalId ? 'selected' : '' ?>>
-            <?= htmlspecialchars($kapal['nama']) ?>
+      <select id="kapal_id" name="kapal_id" required>
+        <option value="" disabled <?= $selectedKapalId ? '' : 'selected' ?>>-- Pilih Kapal --</option>
+        <?php foreach ($kapalList as $k): ?>
+          <option value="<?= $k['id'] ?>" <?= $k['id']==$selectedKapalId? 'selected':''?>>
+            <?= htmlspecialchars($k['nama']) ?>
           </option>
         <?php endforeach; ?>
       </select>
 
       <label for="bulan">Bulan:</label>
-      <select name="bulan" id="bulan">
-        <?php foreach ($bulanList as $num => $nama): ?>
-          <option value="<?= $num ?>" <?= $num == $selectedBulan ? 'selected' : '' ?>><?= $nama ?></option>
+      <select id="bulan" name="bulan" required>
+        <?php foreach ($bulanList as $num=>$nama): ?>
+          <option value="<?= $num ?>" <?= $num==$selectedBulan? 'selected':''?>><?= $nama ?></option>
         <?php endforeach; ?>
       </select>
 
       <label for="tahun">Tahun:</label>
-      <select name="tahun" id="tahun">
-        <?php foreach ($tahunList as $tahun): ?>
-          <option value="<?= $tahun ?>" <?= $tahun == $selectedTahun ? 'selected' : '' ?>><?= $tahun ?></option>
+      <select id="tahun" name="tahun" required>
+        <?php foreach ($tahunList as $t): ?>
+          <option value="<?= $t ?>" <?= $t==$selectedTahun? 'selected':''?>><?= $t ?></option>
         <?php endforeach; ?>
       </select>
 
       <button type="submit">Tampilkan</button>
     </form>
+  </aside>
 
-    <div class="row chart-grid">
-        <div class="left-column">
-          <div class="chart-box">
-            <h3>Grafik Bar</h3>
-            <canvas id="barChart"></canvas>
-          </div>
-          <div class="chart-box">
-            <h3>Grafik Line</h3>
-            <canvas id="lineChart"></canvas>
-          </div>
-        </div>
+  <main class="content">
+    <section class="charts-top">
+      <div class="chart-box">
+        <h3>Grafik Bar</h3>
+        <canvas id="barChart"></canvas>
+      </div>
+      <div class="chart-box">
+        <h3>Grafik Pie</h3>
+        <canvas id="pieChart"></canvas>
+      </div>
+    </section>
 
-        <div class="right-column">
-          <div class="chart-box full-height">
-            <h3>Grafik Pie</h3>
-            <canvas id="pieChart"></canvas>
-          </div>
-        </div>
-    </div>
-  </div>
+    <section class="charts-line">
+      <div class="chart-box">
+        <h3>Grafik Line</h3>
+        <canvas id="lineChart"></canvas>
+      </div>
+    </section>
+  </main>
 
   <script>
     window.chartData = {

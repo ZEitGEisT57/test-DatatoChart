@@ -85,17 +85,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
 
   <header>
-    <div class="logo">
-      <h1>Trend dan Produksi Penumpang Kapal ASDP Cabang Merauke</h1>
+    <div class="container header-inner">
+      <div class="logo">
+        <img src="5f5091ef-6eb8-4132-99ed-af27a6a040c2.png" alt="Logo ASDP" />
+      </div>
+      <h1>Trend & Produksi Penumpang Kapal ASDP Merauke</h1>
+      <nav>
+        <ul class="nav-list">
+          <li><a href="index.php" class="nav-link active">Home</a></li>
+          <li><a href="upload.php" class="nav-link">Input Data</a></li>
+          <li><a href="kapal.php" class="nav-link">Lihat Kapal</a></li>
+          <li><a href="logout.php" class="nav-link">Logout</a></li>
+        </ul>
+      </nav>
     </div>
-    <nav>
-      <ul>
-        <li><a href="index.php">Home</a></li>
-        <li><a href="upload.php" class="active">Input Data</a></li>
-        <li><a href="kapal.php">Lihat Kapal</a></li>
-        <li><a href="logout.php">Logout</a></li>
-      </ul>
-    </nav>
   </header>
 
   <div class="container">
