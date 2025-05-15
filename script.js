@@ -72,3 +72,8 @@ if (dataForm) {
     }
   });
 }
+
+const toggleBtn = document.getElementById('toggleSidebar');
+toggleBtn.addEventListener('click', () => {
+  document.body.classList.toggle('sidebar-open');
+});

@@ -92,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <ul>
         <li><a href="index.php">Home</a></li>
         <li><a href="upload.php" class="active">Input Data</a></li>
-        <li><a href="kapal.html">Lihat Kapal</a></li>
+        <li><a href="kapal.php">Lihat Kapal</a></li>
         <li><a href="logout.php">Logout</a></li>
       </ul>
     </nav>

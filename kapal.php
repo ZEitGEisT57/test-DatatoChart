@@ -70,7 +70,7 @@ $tahunList = range($tahunSekarang - 5, $tahunSekarang + 1);
   </header>
 
   <div class="container">
-    <form method="get" class="kapal-form">
+    <form method="get" class="form-box-kapal">
       <label for="kapal_id">Pilih Kapal:</label>
       <select name="kapal_id" id="kapal_id">
         <?php foreach ($kapalList as $kapal): ?>

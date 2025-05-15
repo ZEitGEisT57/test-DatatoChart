@@ -49,6 +49,92 @@ nav a.active {
   text-decoration: underline;
 }
 
+/* ====================================
+   Sidebar Styling
+==================================== */
+.sidebar {
+  background-color: #1E315C;
+  color: white;
+  width: 260px;
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  position: fixed;
+  top: 0;
+  left: -260px;
+  transition: left 0.3s ease;
+  z-index: 1000;
+}
+
+.sidebar h2 {
+  font-size: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.sidebar-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.sidebar-form label {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.sidebar-form select,
+.sidebar-form button {
+  padding: 0.6rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  border: none;
+}
+
+.sidebar-form button {
+  background-color: #00b2ff;
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.sidebar-form button:hover {
+  background-color: #0090d1;
+}
+
+/* Show sidebar when body has class */
+body.sidebar-open .sidebar {
+  left: 0;
+}
+
+/* Shift container when sidebar is open */
+body.sidebar-open .container {
+  margin-left: 260px;
+  transition: margin-left 0.3s ease;
+}
+
+/* Sidebar Toggle Button */
+.toggle-sidebar-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  color: white;
+  cursor: pointer;
+  margin-right: 1rem;
+}
+
+/* Responsive behavior */
+@media (max-width: 768px) {
+  .sidebar {
+    left: -260px;
+  }
+
+  body.sidebar-open .sidebar {
+    left: 0;
+  }
+
+  body.sidebar-open .container {
+    margin-left: 0;
+  }
+}
 
 /* ====================================
    Container Layout
@@ -59,7 +145,12 @@ nav a.active {
   padding: 2rem;
   margin-left: auto; /* offset for sidebar */
 }
-
+.container-kapal {
+  display: flex;
+  flex-direction: row;
+  padding: 2rem;
+  margin-left: 220px; /* offset for sidebar */
+}
 /* ====================================
    Form Sections (Input & Upload)
 ==================================== */
@@ -69,6 +160,14 @@ nav a.active {
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   margin-bottom: 2rem;
+}
+.form-box-kapal {
+  background-color: #fff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  margin-bottom: 2rem;
+  max-width: 200px;
 }
 
 .form-box h3 {
@@ -120,6 +219,7 @@ form button:hover {
   display: flex;
   flex-wrap: wrap;
   gap: 2rem;
+  margin-left: 260px;
 }
 
 .left-column {
