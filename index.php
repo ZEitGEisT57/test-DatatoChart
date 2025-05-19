@@ -64,7 +64,7 @@ $tahunList     = range($tahunSekarang - 5, $tahunSekarang + 1);
       <h1>Trend & Produksi Penumpang Kapal ASDP Merauke</h1>
       <nav>
         <ul class="nav-list">
-          <li><a href="index.php" class="nav-link active">Home</a></li>
+          <li><a href="dashboard.php" class="nav-link active">Home</a></li>
           <li><a href="upload.php" class="nav-link">Input Data</a></li>
           <li><a href="kapal.php" class="nav-link">Lihat Kapal</a></li>
           <li><a href="logout.php" class="nav-link">Logout</a></li>

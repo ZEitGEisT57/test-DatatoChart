@@ -30,8 +30,11 @@ if ($selectedKapalId) {
     $result = $dataQuery->get_result();
 
     while ($row = $result->fetch_assoc()) {
-        $labels[] = $row['jenis_tiket'];
-        $values[] = (int)$row['total'];
+      $total = (int)$row['total'];
+      if ($total > 0) {
+          $labels[] = $row['jenis_tiket'];
+          $values[] = $total;
+      }
     }
 }
 
@@ -59,14 +62,14 @@ $tahunList     = range($tahunSekarang - 5, $tahunSekarang + 1);
   <header>
     <div class="container header-inner">
       <div class="logo">
-        <img src="5f5091ef-6eb8-4132-99ed-af27a6a040c2.png" alt="Logo ASDP" />
+        <img src="img\ASDP_Logo_2023.png" alt="Logo ASDP" />
       </div>
       <h1>Trend & Produksi Penumpang Kapal ASDP Merauke</h1>
       <nav>
         <ul class="nav-list">
-          <li><a href="index.php" class="nav-link active">Home</a></li>
+          <li><a href="dashboard.php" class="nav-link">Home</a></li>
           <li><a href="upload.php" class="nav-link">Input Data</a></li>
-          <li><a href="kapal.php" class="nav-link">Lihat Kapal</a></li>
+          <li><a href="kapal.php" class="nav-link active">Lihat Kapal</a></li>
           <li><a href="logout.php" class="nav-link">Logout</a></li>
         </ul>
       </nav>

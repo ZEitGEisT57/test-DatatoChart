@@ -44,8 +44,9 @@ header {
 }
 
 .logo img {
-  height: 40px;
-  width: auto;
+  height: 35px;
+  width: 40px;
+  align-items: center;
 }
 
 header h1 {
@@ -138,6 +139,14 @@ nav .nav-link.active {
 /* Konten utama di sebelah kanan sidebar */
 .content {
   margin-left: 280px; /* space buat sidebar fixed */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 72px 1rem 1rem 1rem; /* padding-top = tinggi header + jarak */
+}
+.content-dash {
+  margin-left: auto; /* space buat sidebar fixed */
   flex: 1;
   display: flex;
   flex-direction: column;
