@@ -106,7 +106,7 @@ $koneksi->close();
 <header>
     <div class="container header-inner">
       <div class="logo">
-        <!-- <img src="img\ASDP_Logo_2023.png" alt="Logo ASDP" /> -->
+        <img src="img\ASDP_Logo_2023.png" alt="Logo ASDP" />
       </div>
       <h1>Trend & Produksi Penumpang Kapal ASDP Merauke</h1>
       <nav>
