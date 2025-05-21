@@ -5,7 +5,7 @@ $kapal_sql = "SELECT id, nama FROM kapal";
 $kapal_result = $koneksi->query($kapal_sql);
 
 $rekap = [];
-$summary = ['penumpang' => 0, 'kendaraan' => 0, 'trip' => 0];
+$summary = ['penumpang' => 0, 'kendaraan' => 0, 'barang' => 0];
 
 while ($kapal = $kapal_result->fetch_assoc()) {
     $kapal_id = $kapal['id'];
@@ -19,7 +19,7 @@ while ($kapal = $kapal_result->fetch_assoc()) {
     ";
     $produksi_result = $koneksi->query($query);
 
-    $data = ['penumpang' => 0, 'kendaraan' => 0, 'trip' => 0];
+    $data = ['penumpang' => 0, 'kendaraan' => 0, 'barang' => 0];
 
     while ($row = $produksi_result->fetch_assoc()) {
         $jenis = strtolower($row['jenis_tiket']);
@@ -31,16 +31,16 @@ while ($kapal = $kapal_result->fetch_assoc()) {
         } elseif (preg_match('/\b(golongan)\b/', $jenis)){
             $data['kendaraan'] += $jumlah;
             $summary['kendaraan'] += $jumlah;
+        } elseif (preg_match('/\b(barang)\b/', $jenis)){
+            $data['barang'] += $jumlah;
+            $summary['barang'] += $jumlah;
         }
-        // } elseif (strpos($jenis, 'trip') !== false) {
-        //     $data['trip'] += $jumlah;
-        //     $summary['trip'] += $jumlah;
-        // }
     }
     $rekap[] = [
         'nama_kapal' => $nama_kapal,
         'penumpang' => $data['penumpang'],
-        'kendaraan' => $data['kendaraan']
+        'kendaraan' => $data['kendaraan'],
+        'barang' => $data['barang']
     ];
 }
 
@@ -134,7 +134,7 @@ $koneksi->close();
                         <ul style="list-style:none; padding-left:0; margin-top:0.5rem;">
                             <li>🧍 Penumpang: <strong><?= number_format($kapal['penumpang']) ?></strong></li>
                             <li>🚗 Kendaraan: <strong><?= number_format($kapal['kendaraan']) ?></strong></li>
-                            <!-- <li>🚢 Trip: <strong><?= number_format($kapal['trip']) ?></strong></li> -->
+                            <li>📦 Barang: <strong><?= number_format($kapal['barang']) ?></strong></li>
                         </ul>
                     </div>
                 <?php endforeach; ?>
@@ -162,11 +162,11 @@ $koneksi->close();
     new Chart(document.getElementById('barChart'), {
         type: 'bar',
         data: {
-            labels: ['Penumpang', 'Kendaraan'],
+            labels: ['Penumpang', 'Kendaraan', 'Barang'],
             datasets: [{
                 label: 'Jumlah Produksi',
-                data: [summaryData.penumpang, summaryData.kendaraan],
-                backgroundColor: ['#4caf50', '#2196f3'],
+                data: [summaryData.penumpang, summaryData.kendaraan, summaryData.barang],
+                backgroundColor: ['#4caf50', '#2196f3', '#964B00'],
             }]
         },
         options: {
@@ -189,10 +189,10 @@ $koneksi->close();
     new Chart(document.getElementById('pieChart'), {
         type: 'pie',
         data: {
-            labels: ['Penumpang', 'Kendaraan'],
+            labels: ['Penumpang', 'Kendaraan', 'Barang'],
             datasets: [{
-                data: [summaryData.penumpang, summaryData.kendaraan],
-                backgroundColor: ['#4caf50', '#2196f3'],
+                data: [summaryData.penumpang, summaryData.kendaraan, summaryData.barang],
+                backgroundColor: ['#4caf50', '#2196f3', '#964B00'],
             }]
         },
         options: {
